@@ -1,0 +1,66 @@
+<!DOCTYPE html>
+<html lang="en">
+
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>Vue Basics</title>
+  <link href="https://fonts.googleapis.com/css2?family=Jost:wght@400;700&display=swap" rel="stylesheet" />
+  <link rel="stylesheet" href="styles.css" />
+  <script src="https://unpkg.com/vue@next" defer></script>
+  <script src="app.js" defer></script>
+</head>
+
+<body>
+  <header>
+    <h1>Monster Slayer</h1>
+  </header>
+  <div id="game">
+    <section id="monster" class="container">
+      <h2>Monster Health</h2>
+      <div class="healthbar">
+        <div class="healthbar__value" :style="monsterHPStyles">{{monsterHP}}</div>
+      </div>
+    </section>
+    <section id="player" class="container">
+      <h2>Your Health</h2>
+      <div class="healthbar">
+        <div class="healthbar__value" :style="userHPStyles">{{userHP}}</div>
+      </div>
+    </section>
+    <section class="container" v-if="result">
+      <h1>Game Over</h1>
+      <h2 v-if="result === 'draw'">draw!</h2>
+      <h2 v-else-if="result === 'win'">you win!</h2>
+      <h2 v-else>you lost!</h2>
+      <button @click="startGame">Re Start</button>
+    </section>
+    <section id="controls" v-else>
+      <button @click="monsterAttack">ATTACK</button>
+      <button :disabled="enableSpecialAttack" @click="specialAttackMonster">SPECIAL ATTACK</button>
+      <button @click="userHeal">HEAL</button>
+      <button @click="surrender">SURRENDER</button>
+    </section>
+    <section id="log" class="container" v-if="logs.length">
+      <h2>Battle Log</h2>
+      <ul>
+        <li v-for="log in logs">
+          <span :class="{'log--player' : log.who ==='user', 'log--monster' : log.who==='monster'}">{{log.who}}</span>
+          가
+          <span>{{log.what}}</span>
+          (을) 하였다.
+          <span v-if="log.what==='heal'">
+            에너지 회복!
+            <span class="log--heal">{{log.damage}}</span>
+          </span>
+          <span v-else>
+            데미지:
+            <span class="log--damage">{{log.damage}}</span>
+          </span>
+        </li>
+      </ul>
+    </section>
+  </div>
+</body>
+
+</html>
